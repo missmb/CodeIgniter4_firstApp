@@ -8,20 +8,36 @@ class Pages extends BaseController
 			'title' => 'Home | MissMb',
 			'tes' => ['one','two','tree']
 		];
-		echo view('layout/header', $data);
-		echo view('pages/home');
-		echo view('layout/footer');
+		return view('pages/home',$data);
 	}
 	public function about()
 	{
 		$data = [
 			'title' => 'About Me'
 		];
-		echo view('layout/header', $data);
-		echo view('pages/about');
-		echo view('layout/footer');
+		return view('pages/about',$data);
 	}
 
+	public function contact()
+	{
+		$data = [
+			'title' => 'Contact Us',
+			'address' => [
+				[
+					'type' => 'Home',
+					'address' => 'Surabaya',
+					'country' => 'Indonesia'
+				],
+				[
+					'type' => 'Office',
+					'address' => 'Seattle',
+					'country' => 'USA'
+				],
+
+			]
+		];
+		return view('pages/contact',$data);
+	}
 	//--------------------------------------------------------------------
 
 }
