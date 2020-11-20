@@ -15,6 +15,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/pages/contact">Contact</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/foods">Food</a>
+                    </li>
                 </ul>
             </div>
         </div>
