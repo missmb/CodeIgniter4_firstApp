@@ -32,6 +32,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'pages::index');
 
+$routes->get('/food/create', 'Foods::create');
 $routes->get('/food/(:segment)', 'Foods::detail/$1');
 
 /**

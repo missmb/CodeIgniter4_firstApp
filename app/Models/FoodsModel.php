@@ -5,7 +5,8 @@ use CodeIgniter\Model;
 class FoodsModel extends Model
 {
     protected $table = 'foods';
-	protected $useTimestamps = true;
+    protected $useTimestamps = true;
+    protected $allowedFields = ['title', ' slug', 'region', 'detail', 'cover'];
 
     public function getFood($slug = false)
     {

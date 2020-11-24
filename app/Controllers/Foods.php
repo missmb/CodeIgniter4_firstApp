@@ -42,7 +42,33 @@ class Foods extends BaseController
             'food' => $this->foodsModel->getFood($slug)
         ];
 
+        if(empty($data['food'])){
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('the name of '. $slug .' is not found');
+        }
         return view('foods/detail', $data);
     }
 
+    public function create(){
+        $data = [
+            'title' => 'Form Add Data Food'
+        ];
+
+        return view('foods/create', $data);
+    }
+
+    public function save(){
+        // var_dump($this->request->getVar());
+        $slug = url_title($this->request->getVar('title'),'-',true);
+        $this->foodsModel->save([
+            'title' => $this->request->getVar(('title')),
+            'slug' => $slug,
+            'origin' => $this->request->getVar(('origin')),
+            'detail' => $this->request->getVar(('detail')),
+            'cover' => $this->request->getVar(('cover'))
+        ]);
+
+        session()->setFlashdata('message', 'Success add Data');
+
+        return redirect()->to('/foods');
+    }
 }
