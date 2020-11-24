@@ -10,11 +10,11 @@ class Foods extends BaseController
         $this->foodsModel = new FoodsModel();
     }
     public function index(){
-        $food = $this->foodsModel->findAll();
+        // $food = $this->foodsModel->findAll();
 
         $data = [
             'title' => 'List Food',
-            'food' => $food
+            'food' => $this->foodsModel->getFood()
         ];
 
         //How to Connect db without model
@@ -30,6 +30,19 @@ class Foods extends BaseController
 
 
         return view('Foods/index', $data);
+    }
+
+    public function detail($slug)
+    {
+        // $food = $this->foodsModel->where(['slug' => $slug])->first();
+        // $food = $this->foodsModel->getFood($slug);
+        // var_dump($food);
+        $data = [
+            'title' => 'Detail Food',
+            'food' => $this->foodsModel->getFood($slug)
+        ];
+
+        return view('foods/detail', $data);
     }
 
 }
