@@ -6,9 +6,9 @@
         <div class="col">
             <a href="/food/create" class="btn btn-primary">Add Food</a>
             <h1 class="mt-2 ">Food List</h1>
-            <?php if (session()->getFlashdata('message')) : ?>
+            <?php if (session()->getFlashdata('aaa')) : ?>
                 <div class="alert alert-success" role="alert">
-                    <?php session()->getFlashdata('message'); ?>
+                    <?= session()->getFlashdata('aaa'); ?>
                 </div>
             <?php endif; ?>
             <table class="table">

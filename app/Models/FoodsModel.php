@@ -6,7 +6,7 @@ class FoodsModel extends Model
 {
     protected $table = 'foods';
     protected $useTimestamps = true;
-    protected $allowedFields = ['title', ' slug', 'region', 'detail', 'cover'];
+    protected $allowedFields = ['title', 'slug', 'origin', 'detail', 'cover'];
 
     public function getFood($slug = false)
     {

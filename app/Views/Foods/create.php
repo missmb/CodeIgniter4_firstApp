@@ -6,29 +6,31 @@
         <div class="col">
             <h2 class="my-3">Form Add Data Food</h2>
             <form action="/foods/save" method="post">
-            <?= csrf_field(); ?>
+                <?= csrf_field(); ?>
                 <div class="form-group row">
                     <label for="title" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="title" name="title" autofocus>
+                        <input type="text" class="form-control <?= ($validation->hasError('title')) ? 'is-invalid' : ''; ?>" id="title" name="title" autofocus value="<?= old('title'); ?>">
+                        <div class="invalid-feedback"><?= $validation->getError('title'); ?></div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="region" class="col-sm-2 col-form-label">Region From</label>
+                    <label for="origin" class="col-sm-2 col-form-label">Original From</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="region" name="region">
+                        <input type="text" class="form-control <?= ($validation->hasError('origin')) ? 'is-invalid' : ''; ?>" id="origin" name="origin" value="<?= old('origin'); ?>">
+                        <div class="invalid-feedback"><?= $validation->getError('origin'); ?></div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="detail" class="col-sm-2 col-form-label">Detail</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="detail" name="detail">
+                        <input type="text" class="form-control" id="detail" name="detail" value="<?= old('detail'); ?>">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="cover" class="col-sm-2 col-form-label">Cover</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="cover" name="cover">
+                        <input type="text" class="form-control" id="cover" name="cover" value="<?= old('cover'); ?>">
                     </div>
                 </div>
                 <div class="form-group row">
