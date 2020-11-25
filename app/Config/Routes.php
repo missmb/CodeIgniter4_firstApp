@@ -33,7 +33,9 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'pages::index');
 
 $routes->get('/food/create', 'Foods::create');
-$routes->get('/food/(:segment)', 'Foods::detail/$1');
+$routes->get('/food/edit/(:segment)', 'Foods::edit/$1');
+$routes->delete('food/(:num)', 'Foods::delete/$1');
+$routes->get('/food/(:any)', 'Foods::detail/$1');
 
 /**
  * --------------------------------------------------------------------

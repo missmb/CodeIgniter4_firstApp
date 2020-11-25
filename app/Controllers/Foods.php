@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Models\FoodsModel;
 use CodeIgniter\Config\Config;
@@ -10,7 +12,8 @@ class Foods extends BaseController
     {
         $this->foodsModel = new FoodsModel();
     }
-    public function index(){
+    public function index()
+    {
         // $food = $this->foodsModel->findAll();
 
         $data = [
@@ -43,13 +46,14 @@ class Foods extends BaseController
             'food' => $this->foodsModel->getFood($slug)
         ];
 
-        if(empty($data['food'])){
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('the name of '. $slug .' is not found');
+        if (empty($data['food'])) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('the name of ' . $slug . ' is not found');
         }
         return view('foods/detail', $data);
     }
 
-    public function create(){
+    public function create()
+    {
         // session(); 
         // session change to baseController
         $data = [
@@ -60,11 +64,12 @@ class Foods extends BaseController
         return view('foods/create', $data);
     }
 
-    public function save(){
+    public function save()
+    {
         // var_dump($this->request->getVar());
 
         // validasi input
-        if(!$this->validate([
+        if (!$this->validate([
             'title' => 'required|is_unique[foods.title]',
             'origin' => [
                 'rules' => 'required|is_unique[foods.origin]',
@@ -73,14 +78,14 @@ class Foods extends BaseController
                     'is_unique' => '{field} food is exis'
                 ]
             ]
-        ])){
+        ])) {
             $validation = \Config\Services::validation();
             return redirect()->to('/food/create')->withInput()->withInput('validation', $validation);
             // $data['validation'] = $validation;
             // return view('/food/create');
         }
 
-        $slug = url_title($this->request->getVar('title'),'-',true);
+        $slug = url_title($this->request->getVar('title'), '-', true);
         $this->foodsModel->save([
             'title' => $this->request->getVar(('title')),
             'slug' => $slug,
@@ -89,7 +94,74 @@ class Foods extends BaseController
             'cover' => $this->request->getVar(('cover'))
         ]);
 
-        session()->setFlashdata('aaa', 'Success add Data');
+        session()->setFlashdata('message', 'Success add Data');
+
+        return redirect()->to('/foods');
+    }
+
+    public function delete($id)
+    {
+        $this->foodsModel->delete($id);
+
+        session()->setFlashdata('message', 'Success deleted Data');
+
+        return redirect()->to('/foods');
+    }
+
+    public function edit($slug)
+    {
+        // session(); 
+        // session change to baseController
+        $data = [
+            'title' => 'Form Edit Data Food',
+            'validation' => \Config\Services::validation(),
+            'food' => $this->foodsModel->getFood($slug)
+        ];
+
+        return view('foods/edit', $data);
+    }
+
+    public function update($id)
+    {
+        // var_dump($this->request->getVar());
+
+                    //check title
+                    $oldFood = $this->foodsModel->getFood($this->request->getVar('slug'));
+                    if ($oldFood['title'] == $this->request->getVar('slug')){
+                        $rule_title = 'required';
+                    }else{
+                        $rule_title = 'required|is_unique[foods.title]';
+                    }
+                
+
+        // validasi input
+        if (!$this->validate([
+
+            'title' => [
+                'rules' => $rule_title,
+                'errors' => [
+                    'required' => '{field} food must fill.',
+                    'is_unique' => '{field} food is exis'
+                ]
+            ]
+        ])) {
+            $validation = \Config\Services::validation();
+            return redirect()->to('/food/edit/' . $this->request->getVar('slug'))->withInput()->withInput('validation', $validation);
+            // $data['validation'] = $validation;
+            // return view('/food/create');
+        }
+
+        $slug = url_title($this->request->getVar('title'), '-', true);
+        $this->foodsModel->save([
+            'id' => $id,
+            'title' => $this->request->getVar(('title')),
+            'slug' => $slug,
+            'origin' => $this->request->getVar(('origin')),
+            'detail' => $this->request->getVar(('detail')),
+            'cover' => $this->request->getVar(('cover'))
+        ]);
+
+        session()->setFlashdata('message', 'Success edit Data');
 
         return redirect()->to('/foods');
     }
