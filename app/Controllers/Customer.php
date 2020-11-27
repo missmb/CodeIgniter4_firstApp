@@ -16,10 +16,16 @@ class Customer extends BaseController
     {
         $currentPage = $this->request->getVar('page_customer') ? $this->request->getVar('page_customer') : 1 ;
 
+        $keyword = $this->request->getVar('keyword');
+        if($keyword){
+            $customer = $this->customerModel->search($keyword);
+        }else{
+            $customer = $this->customerModel;
+        }
         $data = [
             'title' => 'List Customer',
             // 'customer' => $this->customerModel->findAll()
-            'customer' => $this->customerModel->paginate(7, 'customer'),
+            'customer' => $customer->paginate(7, 'customer'),
             'pager' => $this->customerModel->pager,
             'currentPage' => $currentPage
         ];

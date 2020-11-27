@@ -3,8 +3,20 @@
 <?= $this->section('content'); ?>
 <div class="container">
     <div class="row">
+        <div class="col-6">
+            <h1 class="mt-2 ">Customer List</h1>
+            <form action="" method="post">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search Customer" name="keyword">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit" name="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
         <div class="col">
-            <h1 class="mt-2 ">Customer  List</h1>
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
