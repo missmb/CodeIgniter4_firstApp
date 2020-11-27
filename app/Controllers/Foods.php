@@ -70,12 +70,19 @@ class Foods extends BaseController
 
         // validasi input
         if (!$this->validate([
-            'title' => 'required|is_unique[foods.title]',
-            'origin' => [
-                'rules' => 'required|is_unique[foods.origin]',
+            'title' => [
+                'rules' => 'required|is_unique[foods.title]',
                 'errors' => [
                     'required' => '{field} food must fill.',
                     'is_unique' => '{field} food is exis'
+                ]
+            ],
+            'cover' => [
+                'rules' => 'max_size[cover,1024]|is_image[cover]|mime_in[cover,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'max_size' => 'image too big',
+                    'is_image' => 'Choose image',
+                    'mime_in' => 'Choose image'
                 ]
             ]
         ])) {
@@ -85,13 +92,23 @@ class Foods extends BaseController
             // return view('/food/create');
         }
 
+        //get image
+        $fileCover = $this->request->getFile('cover');
+        if ($fileCover->getError() == 4) {
+            $nameCover = 'default.jpg';
+        } else {
+            // generate name cover random
+            $nameCover = $fileCover->getRandomName();
+            $fileCover->move('img', $nameCover);
+        }
+
         $slug = url_title($this->request->getVar('title'), '-', true);
         $this->foodsModel->save([
             'title' => $this->request->getVar(('title')),
             'slug' => $slug,
             'origin' => $this->request->getVar(('origin')),
             'detail' => $this->request->getVar(('detail')),
-            'cover' => $this->request->getVar(('cover'))
+            'cover' => $nameCover
         ]);
 
         session()->setFlashdata('message', 'Success add Data');
@@ -101,6 +118,10 @@ class Foods extends BaseController
 
     public function delete($id)
     {
+        $food = $this->foodsModel->find($id);
+        if ($food['cover'] != 'default.jpg') {
+            unlink('img/' . $food['cover']);
+        }
         $this->foodsModel->delete($id);
 
         session()->setFlashdata('message', 'Success deleted Data');
@@ -125,14 +146,14 @@ class Foods extends BaseController
     {
         // var_dump($this->request->getVar());
 
-                    //check title
-                    $oldFood = $this->foodsModel->getFood($this->request->getVar('slug'));
-                    if ($oldFood['title'] == $this->request->getVar('slug')){
-                        $rule_title = 'required';
-                    }else{
-                        $rule_title = 'required|is_unique[foods.title]';
-                    }
-                
+        //check title
+        $oldFood = $this->foodsModel->getFood($this->request->getVar('slug'));
+        if ($oldFood['title'] == $this->request->getVar('slug')) {
+            $rule_title = 'required';
+        } else {
+            $rule_title = 'required|is_unique[foods.title]';
+        }
+
 
         // validasi input
         if (!$this->validate([
@@ -143,12 +164,31 @@ class Foods extends BaseController
                     'required' => '{field} food must fill.',
                     'is_unique' => '{field} food is exis'
                 ]
+            ],
+            'cover' => [
+                'rules' => 'max_size[cover,1024]|is_image[cover]|mime_in[cover,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'max_size' => 'image too big',
+                    'is_image' => 'Choose image',
+                    'mime_in' => 'Choose image'
+                ]
             ]
         ])) {
-            $validation = \Config\Services::validation();
-            return redirect()->to('/food/edit/' . $this->request->getVar('slug'))->withInput()->withInput('validation', $validation);
+            // $validation = \Config\Services::validation();
+            // return redirect()->to('/food/edit/' . $this->request->getVar('slug'))->withInput()->withInput('validation', $validation);
+            return redirect()->to('/food/edit/' . $this->request->getVar('slug'))->withInput();
             // $data['validation'] = $validation;
             // return view('/food/create');
+        }
+
+        $fileCover = $this->request->getFile('cover');
+        
+        if($fileCover->getError() == 4){
+            $nameCover = $this->request->getVar('oldCover');
+        }else{
+            $nameCover = $fileCover->getRandomName();
+            $fileCover->move('img', $nameCover);
+            unlink('img/' . $this->request->getVar('oldCover'));
         }
 
         $slug = url_title($this->request->getVar('title'), '-', true);
@@ -158,7 +198,7 @@ class Foods extends BaseController
             'slug' => $slug,
             'origin' => $this->request->getVar(('origin')),
             'detail' => $this->request->getVar(('detail')),
-            'cover' => $this->request->getVar(('cover'))
+            'cover' => $nameCover
         ]);
 
         session()->setFlashdata('message', 'Success edit Data');
