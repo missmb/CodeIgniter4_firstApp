@@ -18,6 +18,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/foods">Food</a>
                     </li>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer">Customer</a>
+                    </li>
                 </ul>
             </div>
         </div>
